@@ -2,6 +2,6 @@
 # OOP
 
 # Rabia DUMAN
-# Salça (Ramazan)
+# Ramazan İPERLİK
 # Eymen BATIN
 # Hasan H. GÜNEŞ
