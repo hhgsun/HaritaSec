@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="dist/style.css">
+
+  <title>Harita Seçim</title>
+</head>
+<body>
+  <span class="metadata-marker" style="display: none;" data-region_tag="html-body"></span>
+  <div id="map-wrap">
+      <div id="map"></div>
+  </div>
+
+  <div id="container-detail" class="box-hidden">
+    seçim detayı
+  </div>
+
+  <!-- Google Map -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDR9BxloT6YZERaVxmLCL8xgeRAvxdTllk&libraries=places&callback=initMap"></script>
+
+  <script src="dist/main.js"></script>
+</body>
+</html>
