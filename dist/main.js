@@ -45,8 +45,21 @@ function getCoordAddress(lat, lng){
       document.getElementById("container-detail").classList.add('box-show');
       document.getElementById("container-detail").innerHTML = "<pre style='white-space: pre-wrap;'>" + this.responseText + "</pre>";
       console.log(JSON.parse(this.response));
+      yeniUlke('örnek kısa ad', 'uzun Ad');
     }
   };
   xhttp.open("GET", urlCtrl(lat, lng), true);
   xhttp.send();
+}
+
+class Ulke{
+  constructor(kisaad, uzunad){
+    this.kisaad = kisaad;
+    this.uzunad = uzunad;
+  }
+}
+
+function yeniUlke(kad, uad){
+  var ulke1= new Ulke(kad, uad);
+  console.log(ulke1.kisaad + " -- " + ulke1.uzunad);
 }
