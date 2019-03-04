@@ -24,6 +24,25 @@ function initMap() {
     getCoordAddress(e.latLng.lat(), e.latLng.lng());
     marker.setPosition(new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()));
   });
+
+  var drawingManager = new google.maps.drawing.DrawingManager({
+    drawingMode: google.maps.drawing.OverlayType.MARKER,
+    drawingControl: true,
+    drawingControlOptions: {
+      position: google.maps.ControlPosition.TOP_CENTER,
+      drawingModes: ['marker', 'circle', 'polygon', 'rectangle'],
+    },
+    markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
+    circleOptions: {
+      fillColor: '#ffff00',
+      fillOpacity: 1,
+      strokeWeight: 3,
+      clickable: true,
+      editable: true,
+      zIndex: 1
+    }
+  });
+  drawingManager.setMap(map);
 }
 
 var googleMapKey = "AIzaSyDR9BxloT6YZERaVxmLCL8xgeRAvxdTllk";
