@@ -21,7 +21,7 @@ body {
   width: calc(90% - 40px);
   left: 0;
   right: 0;
-  top: 80vh;
+  top: 70vh;
   padding: 25px;
   margin: 25px auto;
   border-radius: 10px;
@@ -31,8 +31,16 @@ body {
   border: 3px solid #fff;
 }
 .box-hidden {
-  display: none;
+  /* display: none; */
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: opacity 600ms, visibility 600ms;
+  transition: opacity 600ms, visibility 600ms;
 }
 .box-show {
-  display: block;
+  /* display: block; */
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: opacity 600ms, visibility 600ms;
+  transition: opacity 600ms, visibility 600ms;
 }
