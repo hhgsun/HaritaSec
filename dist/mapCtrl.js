@@ -1,3 +1,5 @@
+// https://codepen.io/exomark/pen/dafBD leaflet ve openstreetmap incele
+
 // https://developers.google.com/maps/documentation/javascript/examples/place-details
 var coordMapKey = "AIzaSyDR9BxloT6YZERaVxmLCL8xgeRAvxdTllk"; //AIzaSyAh-3vnlSoEldRmuZ2Ed7tLIP5Xu7Rmjis <haritasec-key -dene
 
@@ -18,7 +20,7 @@ function initMap() {
     animation: google.maps.Animation.DROP,
     title: 'Tıkla',
     draggable: true,
-    icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+    //icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
   });
 
   map.addListener('click', function (e) {
@@ -27,6 +29,12 @@ function initMap() {
   });
 
   // http://bl.ocks.org/knownasilya/89a32e572989f0aff1f8 bunu dene
+  var polyOptions = {
+    strokeWeight: 0,
+    fillOpacity: 0.45,
+    editable: true,
+    draggable: true
+  };
   var drawingManager = new google.maps.drawing.DrawingManager({
     drawingMode: google.maps.drawing.OverlayType.POLYGON,
     drawingControl: true,
@@ -41,15 +49,9 @@ function initMap() {
       editable: true,
       draggable: true
     },
-    circleOptions: {
-      fillColor: '#ffff00',
-      fillOpacity: 1,
-      strokeWeight: 3,
-      clickable: true,
-      editable: true,
-      draggable: true,
-      zIndex: 1
-    }
+    rectangleOptions: polyOptions,
+    circleOptions: polyOptions,
+    polygonOptions: polyOptions,
   });
   drawingManager.setMap(map);
   
