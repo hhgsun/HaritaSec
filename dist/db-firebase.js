@@ -10,12 +10,5 @@ var config = {
 };
 firebase.initializeApp(config);
 
-
 var db = firebase.firestore(); // db connect
-var alanlar = db.collection('alanlar'); // db collection
-
-alanlar.get().then(res => {
-  res.forEach(alan => {
-    console.log(alan.data());
-  })
-});
+var shapes = db.collection('shapes'); // db collection

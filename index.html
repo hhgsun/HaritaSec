@@ -14,6 +14,11 @@
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/5.8.5/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.8.5/firebase-firestore.js"></script>
+  
+  <!-- Google Map key:AIzaSyAh-3vnlSoEldRmuZ2Ed7tLIP5Xu7Rmjis -dene -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDR9BxloT6YZERaVxmLCL8xgeRAvxdTllk&libraries=places&libraries=drawing&callback=startApp"></script>
+  <!--key yok dene: <script type="text/javascript"
+  src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script> -->
 </head>
 <body>
   <span class="metadata-marker" style="display: none;" data-region_tag="html-body"></span>
@@ -25,15 +30,15 @@
     seçim detayı
   </div>
 
-  <!-- Google Map key:AIzaSyAh-3vnlSoEldRmuZ2Ed7tLIP5Xu7Rmjis -dene -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDR9BxloT6YZERaVxmLCL8xgeRAvxdTllk&libraries=places&libraries=drawing&callback=initMap"></script>
-  <!--key yok dene: <script type="text/javascript"
-  src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script> -->
+  <div style="position:absolute; right:10px; bottom:10px">
+    <button onclick="deleteShape()">Sil</button>
+  </div>
+
 
   <!-- Includes -->
+  <script src="dist/main.js"></script>
   <script src="dist/mapCtrl.js"></script>
   <script src="dist/models.js"></script>
-  <script src="dist/firebase.js"></script>
-  <script src="dist/main.js"></script>
+  <script src="dist/db-firebase.js"></script>
 </body>
 </html>
