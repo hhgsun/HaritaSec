@@ -6,6 +6,7 @@
 function startApp() {
   var initLatLng = { lat: 41.657447, lng: 26.591756 }; // varsayılan lokasyon
   if (navigator.geolocation) {
+    // cihazın konum bilgisini alma
     navigator.geolocation.getCurrentPosition(function (position) {
       initLatLng.lat = position.coords.latitude;
       initLatLng.lng = position.coords.longitude;
@@ -22,36 +23,75 @@ var map = null;
 
 function initialize(lat, lng){
   map = new MapCtrl(lat, lng);
-  map.initMap();
-  map.mapSetContainerArea("TOP_LEFT", "Harita Seçim OOP Ödev");
+  map.initMap(); // harita yükleme
+  map.mapSetContainerArea("TOP_LEFT", "Harita Seçim OOP Ödev"); // marita üzerinde alan
 
-  map.addShape();
-
-  //** */
-  var paths =[
-    { lat: 41.5055879, lng: 27.1496959 },
-    { lat: 40.5074612, lng: 27.4766318 },
-    { lat: 39.4855018, lng: 26.2730447 },
-    { lat: 41.5055879, lng: 27.1496959 },
-  ];
-  var shape = new Shape("polygon", paths, 'Deneme 4');
-  // shape.save(); //new shape
-  shape.getAll().then(res=>{
-    console.log("liste shape:",res);
+  // kayıtlı içerikleri html içine aktarma
+  shapes.get().then(res => {
+    res.forEach(shape => {
+      console.log('shape:',shape.data());
+    });
   });
 
   // şekil seçildikten sonra tetiklenecek event
-  document.addEventListener("selected-shape", selectShape);
+  document.addEventListener("selected-shape", shapeAddModalOpen);
+  document.addEventListener("selected-shape-clear", shapeAddModalClose);
 }
 
-function selectShape(){
-  console.log('Seçilen Shape Event:', map.selectedShape);
-  /**
-   * BURDA SEÇİLEN ŞEKİL İÇİN DİĞER İŞLEMLER YAPILACAK
-   * -DB KAYIT, TITLE VERME İŞLEMLERİ VS.
-   */
+var currentShape = null;
+
+function shapeAddModalOpen(){
+  currentShape = map.selectedShape;
+  document.getElementById('container-shape-modal').style.display = 'block';
+}
+
+function shapeAddModalClose(){
+  document.getElementById('container-shape-edit-detail').style.display = 'none';
+  document.getElementById('container-shape-modal').style.display = 'none';
+  clearInputs();
+}
+
+function clearInputs(){
+  document.getElementById('input-shape-name').value = null;
+  document.getElementById('input-shape-desc').value = null;
+}
+
+function shapeEditDetailOpen(){
+  document.getElementById('container-shape-edit-detail').style.display = 'block';
 }
 
 function deleteShape(){
+  shapeAddModalClose();
   map.deleteSelectedShape();
+}
+
+function saveShapeDB(){
+  console.log('current', currentShape);
+  var title = document.getElementById('input-shape-name').value;
+  var desc = document.getElementById('input-shape-desc').value;
+  if(currentShape){
+    if(currentShape.type && currentShape.latLngList, title, desc){
+      var latlngList = [];
+      currentShape.latLngList.forEach(latlng=>{
+        latlngList.push({lat: latlng.lat(), lng:latlng.lng()});
+      });
+      var shape = new Shape(currentShape.type, latlngList, title, desc);
+      shape.save().then(function(){
+        alert('Kayıt Başarılı');
+      }).catch(function(err){
+        console.log(err);
+        alert('Beklenmedik Hata');
+      });
+    }else{
+      if(!title && !desc){
+        alert('Başlık ve Açıklama alanlarını doldurunuz');
+        return;
+      }
+      alert('Eksik bilgi girişi yapılmıştır');
+    }
+  }
+}
+
+function setMapShape(){
+  map.setMapShape();
 }

@@ -1,30 +1,21 @@
 
-class Shape{
-  constructor(type=null, paths=null, title=null){
+class Shape {
+  constructor(type = null, paths = null, title = null, desc = null) {
     this.type = type;
     this.paths = paths;
     this.title = title;
+    this.desc = desc
   }
 
-  save(){
-    shapes.add({
+  async save() {
+    return await shapes.add({
       type: this.type,
       paths: this.paths,
-      title: this.title
+      title: this.title,
+      desc: this.desc
     });
   }
 
-  async getAll(){
-    var list = await shapes.get().then(res => {
-      var _list = [];
-      res.forEach(shape => {
-        _list.push(shape.data());
-      });
-      return _list;
-    });
-    return list;
-  }
-  
 }
 
 

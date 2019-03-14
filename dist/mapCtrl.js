@@ -68,12 +68,16 @@ class MapCtrl {
     });
 
     // şekil modu değişince event
-    google.maps.event.addListener(this.drawingManager, 'drawingmode_changed', self.clearSelectShape);
+    google.maps.event.addListener(this.drawingManager, 'drawingmode_changed', function(){
+      self.clearSelectShape();
+    });
     // haritaya tıklayınca event
-    google.maps.event.addListener(this.map, 'click', self.clearSelectShape);
+    google.maps.event.addListener(this.map, 'click', function(){
+      self.clearSelectShape();
+    });
   }
 
-  addShape() {
+  setMapShape() {
     var triangleCoords = [
       { lat: 41.5055879, lng: 27.1496959 },
       { lat: 40.5074612, lng: 27.4766318 },
@@ -93,12 +97,14 @@ class MapCtrl {
 
   // seçilen şeklin konumlarını ayıklar
   shapeCoordToArray(event) {
-    var vertices = event.getPath();
     var latLngList = [];
-    for (var i = 0; i < vertices.getLength(); i++) {
-      var xy = vertices.getAt(i);
-      var latLng = new google.maps.LatLng(xy.lat(), xy.lng());
-      latLngList.push(latLng);
+    if (event) {
+      var vertices = event.getPath();
+      for (var i = 0; i < vertices.getLength(); i++) {
+        var xy = vertices.getAt(i);
+        var latLng = new google.maps.LatLng(xy.lat(), xy.lng());
+        latLngList.push(latLng);
+      }
     }
     return latLngList;
   }
@@ -114,18 +120,20 @@ class MapCtrl {
     document.dispatchEvent(event);
   }
 
-  deleteSelectedShape() {
-    if (this.selectedShape) {
-      this.selectedShape.setMap(null);
-    }
-  }
-
   clearSelectShape() {
     if (this.selectedShape) {
       if (this.selectedShape.type !== 'marker') {
         this.selectedShape.setEditable(false);
       }
       this.selectedShape = null;
+    }
+    var event = new CustomEvent('selected-shape-clear');
+    document.dispatchEvent(event);
+  }
+
+  deleteSelectedShape() {
+    if (this.selectedShape) {
+      this.selectedShape.setMap(null);
     }
   }
 

@@ -30,8 +30,19 @@
     seçim detayı
   </div>
 
-  <div style="position:absolute; right:10px; bottom:10px">
-    <button onclick="deleteShape()">Sil</button>
+  <div id="container-shape-modal" style="position:absolute; right:10px; top:10px; display: none;">
+    
+    <div id="container-shape-edit">
+      <button onclick="shapeEditDetailOpen()">Şekli Kaydet</button>
+      <button onclick="deleteShape()">Şekli Temizle</button>
+    </div>
+
+    <div id="container-shape-edit-detail" style="display: none;">
+      <input id="input-shape-name" type="text" placeholder="Şekil adı giriniz" />
+      <input id="input-shape-desc" type="textarea" placeholder="Şekil için açıklama..." />
+      <button onclick="saveShapeDB()">Kaydet</button>
+    </div>
+  
   </div>
 
 
