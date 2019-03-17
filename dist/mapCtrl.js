@@ -9,6 +9,7 @@ class MapCtrl {
     this.mainMarker = null;
     this.drawingManager = null;
     this.selectedShape = null;
+    this.selectedDbShape = null;
   }
 
   initMap() {
@@ -77,24 +78,6 @@ class MapCtrl {
     });
   }
 
-  setMapShape() {
-    var triangleCoords = [
-      { lat: 41.5055879, lng: 27.1496959 },
-      { lat: 40.5074612, lng: 27.4766318 },
-      { lat: 39.4855018, lng: 26.2730447 },
-      { lat: 41.5055879, lng: 27.1496959 },
-    ];
-    var bermudaTriangle = new google.maps.Polygon({
-      paths: triangleCoords,
-      strokeColor: '#FF0000',
-      strokeOpacity: 0.8,
-      strokeWeight: 2,
-      fillColor: '#FF0000',
-      fillOpacity: 0.35
-    });
-    bermudaTriangle.setMap(this.map);
-  }
-
   // seçilen şeklin konumlarını ayıklar
   shapeCoordToArray(event) {
     var latLngList = [];
@@ -135,6 +118,35 @@ class MapCtrl {
     if (this.selectedShape) {
       this.selectedShape.setMap(null);
     }
+  }
+
+
+  // listeden seçilen şeklin path lerine göre haritada gösterir
+  setMapShape(_paths) {
+    if(this.selectedDbShape)
+      this.selectedDbShape.setMap(null);
+    this.selectedDbShape = new google.maps.Polygon({
+      paths: _paths,
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35
+    }); 
+    this.selectedDbShape.setMap(this.map);
+    var self = this;
+    // oluşan şekile tıklayınca
+    google.maps.event.addListener(this.selectedDbShape, 'click', function () {
+      self.setSelectShape(self.selectedDbShape, this);
+    });
+  }
+
+  setMapZoom(zoomLevel = 18){
+    this.map.setZoom(zoomLevel);
+  }
+
+  setMapCenter(lat, lng){
+    this.map.setCenter(new google.maps.LatLng(lat, lng));
   }
 
   mapSetContainerArea(position, contentHtml) {

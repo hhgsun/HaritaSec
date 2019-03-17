@@ -11,4 +11,4 @@ var config = {
 firebase.initializeApp(config);
 
 var db = firebase.firestore(); // db connect
-var shapes = db.collection('shapes'); // db collection
+var shapesList = db.collection('shapes'); // db collection

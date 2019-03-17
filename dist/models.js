@@ -1,21 +1,22 @@
 
 class Shape {
-  constructor(type = null, paths = null, title = null, desc = null) {
+  constructor(type = null, paths = null, title = null, desc = null, zoom = 18) {
     this.type = type;
     this.paths = paths;
     this.title = title;
-    this.desc = desc
+    this.desc = desc;
+    this.zoom = zoom;
   }
 
   async save() {
-    return await shapes.add({
+    return await shapesList.add({
       type: this.type,
       paths: this.paths,
       title: this.title,
-      desc: this.desc
+      desc: this.desc,
+      zoom: this.zoom
     });
   }
-
 }
 
 

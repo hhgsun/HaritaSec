@@ -1,4 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway:500,600,700,800,400);
+
 body {
   font-family: 'Raleway', sans-serif;
   height: 100vh;
@@ -27,7 +28,7 @@ body {
   border-radius: 10px;
   background: linear-gradient(45deg, #007991 0%, #78ffd6 100%);
   z-index: 999;
-  min-height: 200px;
+  /* min-height: 200px; */
   border: 3px solid #fff;
 }
 .box-hidden {
@@ -43,4 +44,32 @@ body {
   opacity: 1;
   -webkit-transition: opacity 600ms, visibility 600ms;
   transition: opacity 600ms, visibility 600ms;
+}
+
+/**/
+#container-shape-list::-webkit-scrollbar { width: 4px; height: 4px; }
+#container-shape-list::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); }
+#container-shape-list::-webkit-scrollbar-track { background:rgba(0, 0, 0, 0.1); }
+
+#container-shape-list {
+  background: linear-gradient(45deg, #007991 0%, #78ffd6 100%);
+  padding: 10px;
+  color: #fff;
+  border-radius: 10px;
+  border: 3px solid #fff;
+}
+#container-shape-list ul,
+#container-shape-list li {
+  list-style: none;
+}
+#container-shape-list li {
+  padding: 5px;
+  border-bottom: 1px solid #fff;
+  cursor: pointer;
+}
+#container-shape-list li:hover {
+  border-bottom-color: #7c7c7c;
+}
+#container-shape-list li:last-child {
+  border-bottom-color: none;
 }
