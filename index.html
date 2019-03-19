@@ -30,21 +30,25 @@
     seçim detayı
   </div>
 
-  <div id="container-shape-list" style="position: fixed; left: 10px; top: 40px; max-height: 80%; max-width: 150px; overflow-x: auto;">
+  <div id="container-shape-list" style="display: none;">
     <!-- shape list render -->
   </div>
 
-  <div id="container-shape-modal" style="position:fixed; right:10px; top:10px; display: none;">
+  <div id="container-shape-modal">
     
     <div id="container-shape-edit">
-      <button onclick="shapeEditDetailOpen()">Şekli Kaydet</button>
-      <button onclick="deleteShape()">Şekli Temizle</button>
+      Seçili Şekli:<br>
+      <button id="btn-shape-edit-open" onclick="shapeEditDetailOpen()">Ekle</button>
+      <button id="btn-shape-edit-close" onclick="deleteShape()">Kaldır</button>
     </div>
 
     <div id="container-shape-edit-detail" style="display: none;">
       <input id="input-shape-name" type="text" placeholder="Şekil adı giriniz" />
       <input id="input-shape-desc" type="textarea" placeholder="Şekil için açıklama..." />
-      <button onclick="saveShapeDB()">Kaydet</button>
+      <button onclick="saveShapeDBCancel()">&laquo; İptal</button>
+      <button id="btn-shape-db" onclick="saveShapeDB()">Kaydet</button>
+      <button id="btn-shape-db-update" onclick="saveShapeDB()">Güncelle</button>
+      <button id="btn-shape-db-delete" onclick="shapeDBDelete()" style="float:right;">Kalıcı Sil</button>
     </div>
   
   </div>

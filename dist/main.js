@@ -1,7 +1,3 @@
-// https://developers.google.com/maps/documentation/javascript/examples/place-details
-// http://bl.ocks.org/knownasilya/89a32e572989f0aff1f8
-// http://bl.ocks.org/knownasilya/89a32e572989f0aff1f8 bunu dene
-
 // APP START
 function startApp() {
   var initLatLng = { lat: 41.657447, lng: 26.591756 }; // varsayılan lokasyon
@@ -36,8 +32,9 @@ function loadShapeList() {
   // sıfırlama
   document.getElementById('container-shape-list').innerHTML = '';
   // kayıtlı içerikleri html içine aktarma
-  shapesList.get().then(res => {
+  shapesList.orderBy('createdDate', 'desc').get().then(res => {
     if (res.size) {
+      document.getElementById('container-shape-list').append('Kayıtlı Şekiller:');
       res.forEach(shape => {
         var li = document.createElement('li');
         li.id = shape.id;
@@ -46,19 +43,25 @@ function loadShapeList() {
         li.append(shape.data().title);
         document.getElementById('container-shape-list').append(li);
       });
+      document.getElementById('container-shape-list').style.display = 'block';
     } else {
-      document.getElementById('container-shape-list').append('Kayıt Bulunmamaktadır')
+      document.getElementById('container-shape-list').append('Kayıt Bulunmamaktadır');
+      document.getElementById('container-shape-list').style.display = 'block';
     }
   });
 }
 
+
 function loadGetShapeData(itemObj) {
-  console.log('ggg', itemObj.id);
-  if(itemObj.id){
-    shapesList.doc(itemObj.id).get().then(function(res){
-      if(res.exists){
-        setMapShape(res.data().paths, res.data().zoom);
-      }else{
+  if (itemObj.id) {
+    shapesList.doc(itemObj.id).get().then(function (res) {
+      if (res.exists) {
+        setMapShape(res.data().paths, res.data().zoom, {
+          id: itemObj.id,
+          title: res.data().title,
+          desc: res.data().desc
+        });
+      } else {
         alert('Veri Kaydı Eksik');
       }
     });
@@ -71,11 +74,23 @@ var currentShape = null;
 function shapeAddModalOpen() {
   currentShape = map.selectedShape;
   document.getElementById('container-shape-modal').style.display = 'block';
+  document.getElementById('btn-shape-db').style.display = 'inline-block';
+  document.getElementById('btn-shape-edit-open').innerHTML = '+ Ekle';
+  if (currentShape.db) {
+    document.getElementById('btn-shape-edit-open').innerHTML = 'Düzenle';
+    document.getElementById('btn-shape-db').style.display = 'none';
+    document.getElementById('btn-shape-db-update').style.display = 'inline-block';
+    document.getElementById('btn-shape-db-delete').style.display = 'inline-block';
+    document.getElementById('input-shape-name').value = currentShape.dbData.title;
+    document.getElementById('input-shape-desc').value = currentShape.dbData.desc;
+  }
 }
 
 function shapeAddModalClose() {
   document.getElementById('container-shape-edit-detail').style.display = 'none';
   document.getElementById('container-shape-modal').style.display = 'none';
+  document.getElementById('btn-shape-db-update').style.display = 'none';
+  document.getElementById('btn-shape-db-delete').style.display = 'none';
   clearInputs();
 }
 
@@ -93,6 +108,16 @@ function deleteShape() {
   map.deleteSelectedShape();
 }
 
+function shapeDBDelete() {
+  var deleteShape = new Shape();
+  deleteShape.delete(currentShape.dbData.id).then(function(){
+    map.deleteSelectedShape();
+    shapeAddModalClose();
+    loadShapeList();
+    alert('Silme Başarılı');
+  }).catch(err=>console.log('Beklenmedik Hata', err));
+}
+
 function saveShapeDB() {
   var title = document.getElementById('input-shape-name').value;
   var desc = document.getElementById('input-shape-desc').value;
@@ -103,14 +128,26 @@ function saveShapeDB() {
         paths.push({ lat: latlng.lat(), lng: latlng.lng() });
       });
       var shape = new Shape(currentShape.type, paths, title, desc, this.map.map.getZoom());
-      shape.save().then(function () {
-        shapeAddModalClose();
-        loadShapeList();
-        alert('Kayıt Başarılı');
-      }).catch(function (err) {
-        console.log(err);
-        alert('Beklenmedik Hata');
-      });
+      if(currentShape.db){
+        shape.update(currentShape.dbData.id).then(function () {
+          shapeAddModalClose();
+          loadShapeList();
+          alert('Kayıt Başarılı');
+        }).catch(function (err) {
+          console.log(err);
+          alert('Beklenmedik Hata');
+        });
+      }else{
+        shape.save().then(function () {
+          shapeAddModalClose();
+          loadShapeList();
+          alert('Kayıt Başarılı');
+        }).catch(function (err) {
+          console.log(err);
+          alert('Beklenmedik Hata');
+        });
+      }
+      this.map.clearSelectShape();
     } else {
       if (!title && !desc) {
         alert('Başlık ve Açıklama alanlarını doldurunuz');
@@ -121,8 +158,16 @@ function saveShapeDB() {
   }
 }
 
-function setMapShape(_paths, _zoomLevel) {
+
+function saveShapeDBCancel() {
+  if (currentShape) {
+    document.getElementById('container-shape-edit-detail').style.display = 'none';
+  }
+}
+
+function setMapShape(_paths, _zoomLevel, data = { id: null, title: null, desc: null }, ) {
+  map.drawingManager.setDrawingMode(null);
   map.setMapZoom(_zoomLevel);
-  map.setMapShape(_paths);
+  map.setMapShape(_paths, { id: data.id, title: data.title, desc: data.desc });
   map.setMapCenter(_paths[0]);
 }

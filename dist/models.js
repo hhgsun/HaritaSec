@@ -1,11 +1,12 @@
 
 class Shape {
-  constructor(type = null, paths = null, title = null, desc = null, zoom = 18) {
+  constructor(type = null, paths = null, title = null, desc = null, zoom = 18, createdDate = Date.now() ) {
     this.type = type;
     this.paths = paths;
     this.title = title;
     this.desc = desc;
     this.zoom = zoom;
+    this.createdDate = createdDate;
   }
 
   async save() {
@@ -14,8 +15,24 @@ class Shape {
       paths: this.paths,
       title: this.title,
       desc: this.desc,
-      zoom: this.zoom
+      zoom: this.zoom,
+      createdDate: this.createdDate
     });
+  }
+
+  async update(id){
+    return await shapesList.doc(id).update({
+      title: this.title,
+      desc: this.desc,
+      zoom: this.zoom,
+      updateDate: this.createdDate,
+      paths: this.paths,
+      type: this.type
+    });
+  }
+
+  async delete(id){
+    return await shapesList.doc(id).delete();
   }
 }
 

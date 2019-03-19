@@ -41,7 +41,7 @@ class MapCtrl {
       drawingControl: true,
       drawingControlOptions: {
         position: google.maps.ControlPosition.TOP_CENTER,
-        drawingModes: ['circle', 'rectangle', 'polygon'],
+        drawingModes: ['polygon'], //'circle', 'rectangle', 
       },
       rectangleOptions: polyOptions,
       circleOptions: polyOptions,
@@ -65,15 +65,24 @@ class MapCtrl {
       // oluşan şekile tıklayınca
       google.maps.event.addListener(newShape, 'click', function () {
         self.setSelectShape(newShape, this);
+
+        var newShapeSelf = this;
+        // şekil üzerinde nokta değişikliği ve ekleme yapıldığında
+        google.maps.event.addListener(newShape.getPath(), 'set_at', function () {
+          self.setSelectShape(newShape, newShapeSelf);
+        });
+        google.maps.event.addListener(newShape.getPath(), 'insert_at', function () {
+          self.setSelectShape(newShape, newShapeSelf);
+        });
       });
     });
 
     // şekil modu değişince event
-    google.maps.event.addListener(this.drawingManager, 'drawingmode_changed', function(){
+    google.maps.event.addListener(this.drawingManager, 'drawingmode_changed', function () {
       self.clearSelectShape();
     });
     // haritaya tıklayınca event
-    google.maps.event.addListener(this.map, 'click', function(){
+    google.maps.event.addListener(this.map, 'click', function () {
       self.clearSelectShape();
     });
   }
@@ -92,10 +101,11 @@ class MapCtrl {
     return latLngList;
   }
 
-  setSelectShape(shape, shapeClickEvent = null) {
+  setSelectShape(shape, shapeClickEvent = null, db = false) {
     if (shape.type !== 'marker') {
       this.clearSelectShape();
       shape.setEditable(true);
+      shape.db = db;
       shape.latLngList = this.shapeCoordToArray(shapeClickEvent); // diktörtgen ve yuvarlak seçimlerinde sorun var
     }
     this.selectedShape = shape;
@@ -120,10 +130,9 @@ class MapCtrl {
     }
   }
 
-
   // listeden seçilen şeklin path lerine göre haritada gösterir
-  setMapShape(_paths) {
-    if(this.selectedDbShape)
+  setMapShape(_paths, dbShapeData) {
+    if (this.selectedDbShape)
       this.selectedDbShape.setMap(null);
     this.selectedDbShape = new google.maps.Polygon({
       paths: _paths,
@@ -132,20 +141,29 @@ class MapCtrl {
       strokeWeight: 2,
       fillColor: '#FF0000',
       fillOpacity: 0.35
-    }); 
+    });
     this.selectedDbShape.setMap(this.map);
+    this.selectedDbShape.dbData = dbShapeData;
     var self = this;
     // oluşan şekile tıklayınca
     google.maps.event.addListener(this.selectedDbShape, 'click', function () {
-      self.setSelectShape(self.selectedDbShape, this);
+      self.setSelectShape(self.selectedDbShape, this, true);
+      var newShapeSelf = this;
+      // şekil üzerinde nokta değişikliği ve ekleme yapıldığında
+      google.maps.event.addListener(self.selectedDbShape.getPath(), 'set_at', function () {
+        self.setSelectShape(self.selectedDbShape, newShapeSelf, true);
+      });
+      google.maps.event.addListener(self.selectedDbShape.getPath(), 'insert_at', function () {
+        self.setSelectShape(self.selectedDbShape, newShapeSelf, true);
+      });
     });
   }
 
-  setMapZoom(zoomLevel = 18){
+  setMapZoom(zoomLevel = 18) {
     this.map.setZoom(zoomLevel);
   }
 
-  setMapCenter(lat, lng){
+  setMapCenter(lat, lng) {
     this.map.setCenter(new google.maps.LatLng(lat, lng));
   }
 

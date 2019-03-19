@@ -47,12 +47,18 @@ body {
 }
 
 /**/
-#container-shape-list::-webkit-scrollbar { width: 4px; height: 4px; }
+/* #container-shape-list::-webkit-scrollbar { width: 4px; height: 4px; }
 #container-shape-list::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); }
 #container-shape-list::-webkit-scrollbar-track { background:rgba(0, 0, 0, 0.1); }
-
+ */
 #container-shape-list {
-  background: linear-gradient(45deg, #007991 0%, #78ffd6 100%);
+  position: fixed;
+  left: 10px;
+  top: 40px;
+  max-height: 80%;
+  max-width: 150px;
+  overflow-x: auto;
+  background: linear-gradient(45deg, #007991 50%, #78ffd6 100%);
   padding: 10px;
   color: #fff;
   border-radius: 10px;
@@ -73,3 +79,38 @@ body {
 #container-shape-list li:last-child {
   border-bottom-color: none;
 }
+
+/**/
+#container-shape-modal{
+  position: fixed;
+  right:10px;
+  top:40px;
+  display: none;
+  min-width: 250px;
+  text-align: center;
+}
+
+#container-shape-edit, #container-shape-edit-detail {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: linear-gradient(45deg, #007991 0%, #78ffd6 100%);
+  padding: 10px;
+  color: #fff;
+  border-radius: 10px;
+  border: 3px solid #fff;
+}
+
+#container-shape-modal input {
+  width: 88%;
+}
+#container-shape-modal button, #container-shape-modal input {
+  margin: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  border: 2px solid #fff;
+}
+
+
+/* @media (max-width: 600px) {
+} */
