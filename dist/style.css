@@ -22,7 +22,7 @@ body {
   width: calc(90% - 40px);
   left: 0;
   right: 0;
-  top: 70vh;
+  top: 76vh;
   padding: 25px;
   margin: 25px auto;
   border-radius: 10px;
@@ -111,6 +111,28 @@ body {
   border: 2px solid #fff;
 }
 
+
+#container-detail b {
+  color: #195f5e;
+}
+#container-detail span {
+  color: #ffffff;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px #6f6f6f;
+}
+#container-detail button {
+  margin: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  border: 2px solid #fff;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+hr {
+  border-style: dashed;
+  border-color: #2caaaa;
+}
 
 /* @media (max-width: 600px) {
 } */

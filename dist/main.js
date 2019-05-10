@@ -19,6 +19,7 @@ var map = null;
 
 function initialize(lat, lng) {
   map = new MapCtrl(lat, lng);
+  map.zoom = 13;
   map.initMap(); // harita yükleme
   map.mapSetContainerArea("TOP_LEFT", "Harita Seçim OOP Ödev"); // marita üzerinde alan
 
@@ -110,12 +111,12 @@ function deleteShape() {
 
 function shapeDBDelete() {
   var deleteShape = new Shape();
-  deleteShape.delete(currentShape.dbData.id).then(function(){
+  deleteShape.delete(currentShape.dbData.id).then(function () {
     map.deleteSelectedShape();
     shapeAddModalClose();
     loadShapeList();
     alert('Silme Başarılı');
-  }).catch(err=>console.log('Beklenmedik Hata', err));
+  }).catch(err => console.log('Beklenmedik Hata', err));
 }
 
 function saveShapeDB() {
@@ -128,7 +129,7 @@ function saveShapeDB() {
         paths.push({ lat: latlng.lat(), lng: latlng.lng() });
       });
       var shape = new Shape(currentShape.type, paths, title, desc, this.map.map.getZoom());
-      if(currentShape.db){
+      if (currentShape.db) {
         shape.update(currentShape.dbData.id).then(function () {
           shapeAddModalClose();
           loadShapeList();
@@ -137,7 +138,7 @@ function saveShapeDB() {
           console.log(err);
           alert('Beklenmedik Hata');
         });
-      }else{
+      } else {
         shape.save().then(function () {
           shapeAddModalClose();
           loadShapeList();
@@ -170,4 +171,8 @@ function setMapShape(_paths, _zoomLevel, data = { id: null, title: null, desc: n
   map.setMapZoom(_zoomLevel);
   map.setMapShape(_paths, { id: data.id, title: data.title, desc: data.desc });
   map.setMapCenter(_paths[0]);
+}
+
+function adresDetayKapat() {
+  map.detailBoxHidden();
 }

@@ -181,8 +181,22 @@ class MapCtrl {
     var self = this;
     var address = new CoordAddress(lat, lng);
     address.getCoordAdressData().then(function (res) {
+      res = JSON.parse(res);
+      var renderText = null;
+      console.log(res);
+      if (res.status == 'OK') {
+        renderText = '<span>' + res.results[0].formatted_address + '</span><hr>';
+        res.results[0].address_components.forEach(adr_comp => {
+          renderText = renderText + '<p><b>' + adr_comp.types[0] + '</b>: ' + adr_comp.long_name + '</p>';
+        });
+      } else if (res.status == 'ZERO_RESULTS') {
+        renderText = '<span>' + (res.plus_code.compound_code ? res.plus_code.compound_code : 'Geçersiz Seçim') + '</span>';
+      } else {
+        renderText = 'Hatalı Seçim';
+      }
+      renderText = renderText + '<button type="button" onclick="adresDetayKapat();">Kapat</button>'
       self.detailBoxShow();
-      document.getElementById("container-detail").innerHTML = "<pre style='white-space: pre-wrap;'>" + res + "</pre>";
+      document.getElementById("container-detail").innerHTML = "<p style='white-space: pre-wrap;'>" + renderText + "</p>";
     });
   };
 
